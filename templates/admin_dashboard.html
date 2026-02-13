@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard</title>
@@ -10,127 +11,129 @@
 
 <body class="bg-light">
 
-<div class="container mt-4">
+    <div class="container mt-4">
 
-    <h2 class="text-center mb-4">📊 Feedback Insight Dashboard</h2>
+        <h2 class="text-center mb-4">📊 Feedback Insight Dashboard</h2>
 
-    <!-- SUMMARY CARDS -->
-    <div class="row text-center mb-4">
-        <div class="col-md-3">
-            <div class="card bg-success text-white shadow">
-                <div class="card-body">
-                    <h5>Positive</h5>
-                    <h3>{{ positive }}</h3>
+        <!-- SUMMARY CARDS -->
+        <div class="row text-center mb-4">
+            <div class="col-md-3">
+                <div class="card bg-success text-white shadow">
+                    <div class="card-body">
+                        <h5>Positive</h5>
+                        <h3>{{ positive }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card bg-danger text-white shadow">
+                    <div class="card-body">
+                        <h5>Negative</h5>
+                        <h3>{{ negative }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card bg-warning text-white shadow">
+                    <div class="card-body">
+                        <h5>Neutral</h5>
+                        <h3>{{ neutral }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card bg-primary text-white shadow">
+                    <div class="card-body">
+                        <h5>Avg Rating</h5>
+                        <h3>{{ avg_rating }}</h3>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card bg-danger text-white shadow">
-                <div class="card-body">
-                    <h5>Negative</h5>
-                    <h3>{{ negative }}</h3>
-                </div>
+        <!-- CHART -->
+        <div class="card shadow mb-4">
+            <div class="card-body" style="height:300px;">
+                <canvas id="sentimentChart"></canvas>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card bg-warning text-white shadow">
-                <div class="card-body">
-                    <h5>Neutral</h5>
-                    <h3>{{ neutral }}</h3>
-                </div>
-            </div>
+        <!-- EXPORT BUTTON -->
+        <div class="text-end mb-2">
+            <a href="/export/" class="btn btn-outline-primary">⬇ Export CSV</a>
         </div>
 
-        <div class="col-md-3">
-            <div class="card bg-primary text-white shadow">
-                <div class="card-body">
-                    <h5>Avg Rating</h5>
-                    <h3>{{ avg_rating }}</h3>
-                </div>
-            </div>
+        <!-- TABLE -->
+        <table class="table table-bordered table-hover shadow">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>College</th>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Rating</th>
+                    <th>Feedback</th>
+                    <th>Sentiment</th>
+                    <th>Action</th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for f in feedbacks %}
+                <tr>
+                    <td>{{ f.name }}</td>
+                    <td>{{ f.department }}</td>
+                    <td>{{ f.college_name }}</td>
+                    <td>{{ f.event_name }}</td>
+                    <td>{{ f.event_date }}</td>
+                    <td>{{ f.rating }} ⭐</td>
+                    <td>{{ f.message }}</td>
+                    <td>{{ f.sentiment }}</td>
+                    <td>
+                        <a href="/delete/{{ f.id }}/" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">
+                        No feedback submitted yet
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="text-center mt-3">
+            <a href="/" class="btn btn-outline-secondary">⬅ Back to Form</a>
         </div>
+
     </div>
 
-    <!-- CHART -->
-    <div class="card shadow mb-4">
-        <div class="card-body" style="height:300px;">
-            <canvas id="sentimentChart"></canvas>
-        </div>
-    </div>
+    <!-- CHART SCRIPT -->
+    <script>
+        const ctx = document.getElementById('sentimentChart');
 
-    <!-- EXPORT BUTTON -->
-    <div class="text-end mb-2">
-        <a href="/export/" class="btn btn-outline-primary">⬇ Export CSV</a>
-    </div>
-
-    <!-- TABLE -->
-    <table class="table table-bordered table-hover shadow">
-        <thead class="table-dark">
-            <tr>
-                <th>Name</th>
-                <th>Rating</th>
-                <th>Feedback</th>
-                <th>Sentiment</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-
-        <tbody>
-        {% for f in feedbacks %}
-            <tr>
-                <td>{{ f.name }}</td>
-                <td>{{ f.rating }} ⭐</td>
-                <td>{{ f.message }}</td>
-                <td>
-                    <span class="badge 
-                    {% if f.sentiment == 'Positive' %}bg-success
-                    {% elif f.sentiment == 'Negative' %}bg-danger
-                    {% else %}bg-warning{% endif %}">
-                        {{ f.sentiment }}
-                    </span>
-                </td>
-                <td>
-                    <a href="/delete/{{ f.id }}/" class="btn btn-sm btn-danger">
-                        Delete
-                    </a>
-                </td>
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan="5" class="text-center text-muted">
-                    No feedback submitted yet
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <div class="text-center mt-3">
-        <a href="/" class="btn btn-outline-secondary">⬅ Back to Form</a>
-    </div>
-
-</div>
-
-<!-- CHART SCRIPT -->
-<script>
-const ctx = document.getElementById('sentimentChart');
-
-new Chart(ctx, {
-    type: 'pie',
-    data: {
-        labels: ['Positive', 'Negative', 'Neutral'],
-        datasets: [{
-            data: [{{ positive }}, {{ negative }}, {{ neutral }}],
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Positive', 'Negative', 'Neutral'],
+                datasets: [{
+                    data: [{{ positive }}, {{ negative }}, {{ neutral }}],
             backgroundColor: ['#198754', '#dc3545', '#ffc107']
         }]
     },
-    options: {
-        maintainAspectRatio: false
-    }
+            options: {
+            maintainAspectRatio: false
+        }
 });
-</script>
+    </script>
 
 </body>
+
 </html>

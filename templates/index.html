@@ -10,30 +10,62 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">📝 AI Feedback System</h2>
 
-    <div class="card shadow p-4">
-        <form method="post" action="/submit/">
-            {% csrf_token %}
+   <div class="card shadow p-4">
+    <form method="post" action="/submit/">
+        {% csrf_token %}
 
-            <div class="mb-3">
-                <label class="form-label">Name</label>
-                <input type="text" name="name" class="form-control" required>
-            </div>
+        <div class="mb-3">
+            <label class="form-label">Student Name</label>
+            <input type="text" name="name" class="form-control" required>
+        </div>
 
-            <div class="mb-3">
-                <label class="form-label">Rating (1–5)</label>
-                <input type="number" name="rating" min="1" max="5" class="form-control" required>
-            </div>
+        <div class="mb-3">
+            <label class="form-label">Department</label>
+            <select name="department" class="form-control" required>
+                <option value="">Select Department</option>
+                <option>BSc CS</option>
+                <option>BCom CA</option>
+                <option>CS</option>
+                <option>BBA</option>
+            </select>
+        </div>
 
-            <div class="mb-3">
-                <label class="form-label">Feedback</label>
-                <textarea name="message" class="form-control" rows="4" required></textarea>
-            </div>
+        <div class="mb-3">
+            <label class="form-label">College Name</label>
+            <input type="text" name="college_name" class="form-control" required>
+        </div>
 
-            <button type="submit" class="btn btn-primary w-100">
-                Submit Feedback
-            </button>
-        </form>
-    </div>
+        <div class="mb-3">
+            <label class="form-label">Event Name</label>
+            <select name="event_name" class="form-control" required>
+                <option value="">Select Event</option>
+                <option>Naya</option>
+                <option>Interzela</option>
+                <option>Tech Fest</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Event Date</label>
+            <input type="date" name="event_date" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Rating (1–5)</label>
+            <input type="number" name="rating" min="1" max="5" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Feedback</label>
+            <textarea name="message" class="form-control" rows="4" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">
+            Submit Feedback
+        </button>
+    </form>
+</div>
+
 
     <div class="text-center mt-3">
         <a href="/dashboard/" class="btn btn-outline-success">

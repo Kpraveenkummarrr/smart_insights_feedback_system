@@ -15,6 +15,10 @@ def index(request):
 def submit_feedback(request):
     if request.method == 'POST':
         name = request.POST['name']
+        department = request.POST['department']
+        college_name = request.POST['college_name']
+        event_name = request.POST['event_name']
+        event_date = request.POST['event_date']
         rating = int(request.POST['rating'])
         message = request.POST['message']
 
@@ -23,10 +27,15 @@ def submit_feedback(request):
 
         Feedback.objects.create(
             name=name,
+            department=department,
+            college_name=college_name,
+            event_name=event_name,
+            event_date=event_date,
             rating=rating,
             message=message,
             sentiment=sentiment
         )
+
         return redirect('/')
 
 
